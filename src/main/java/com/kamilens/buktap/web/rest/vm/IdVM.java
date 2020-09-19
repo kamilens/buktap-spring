@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Builder
 @Data
-public class IdResponseVM {
+public class IdVM {
 
     private Long id;
 

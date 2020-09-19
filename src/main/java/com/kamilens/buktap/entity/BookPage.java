@@ -3,15 +3,15 @@ package com.kamilens.buktap.entity;
 import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(of = {"id", "page"})
+@EqualsAndHashCode(of = "id")
 @Data
 @Entity
 @Table(name = "book_pages")
@@ -23,7 +23,7 @@ public class BookPage {
     private Long id;
 
     @NotNull
-    @Min(1)
+    @Size(min = 1)
     @Column(name = "page")
     private Long page;
 

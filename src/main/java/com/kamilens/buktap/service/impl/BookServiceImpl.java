@@ -8,7 +8,7 @@ import com.kamilens.buktap.service.BookFileStorageService;
 import com.kamilens.buktap.service.BookService;
 import com.kamilens.buktap.service.dto.BookCreateDTO;
 import com.kamilens.buktap.service.mapper.BookMapper;
-import com.kamilens.buktap.web.rest.vm.IdResponseVM;
+import com.kamilens.buktap.web.rest.vm.IdVM;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
@@ -26,7 +26,7 @@ public class BookServiceImpl implements BookService {
 
     @SneakyThrows
     @Override
-    public IdResponseVM create(BookCreateDTO bookCreateDTO) {
+    public IdVM create(BookCreateDTO bookCreateDTO) {
         String bookUniquePath = UUID.randomUUID().toString();
 
         BookImage bookImage = bookFileStorageService
@@ -39,7 +39,7 @@ public class BookServiceImpl implements BookService {
 
         Book savedBook = bookRepository.save(mappedBook);
 
-        return IdResponseVM.builder().id(savedBook.getId()).build();
+        return IdVM.builder().id(savedBook.getId()).build();
     }
 
 }

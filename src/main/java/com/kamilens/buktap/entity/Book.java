@@ -44,6 +44,14 @@ public class Book {
     )
     private Set<BookAuthor> authors = new HashSet<>();
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "book_x_book_genre",
+            joinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "book_genre_id", referencedColumnName = "id")
+    )
+    private Set<BookGenre> genres = new HashSet<>();
+
     @NotNull
     @Temporal(TemporalType.DATE)
     @Column(name = "published_date")
@@ -65,8 +73,6 @@ public class Book {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "upload_date")
     private Date uploadDate;
-
-
 
     @NotNull
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

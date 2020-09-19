@@ -1,0 +1,8 @@
+${AnsiColor.GREEN}  _____   _____    _____    _____   _   _    _____  ${AnsiColor.RED}  ____     ____     ____    _______
+${AnsiColor.GREEN} / ____| |  __ \  |  __ \  |_   _| | \ | |  / ____| ${AnsiColor.RED} |  _ \   / __ \   / __ \  |__   __|
+${AnsiColor.GREEN}| (___   | |__) | | |__) |   | |   |  \| | | |  __  ${AnsiColor.RED} | |_) | | |  | | | |  | |    | |
+${AnsiColor.GREEN} \___ \  |  ___/  |  _  /    | |   | . ` | | | |_ | ${AnsiColor.RED} |  _ <  | |  | | | |  | |    | |
+${AnsiColor.GREEN} ____) | | |      | | \ \   _| |_  | |\  | | |__| | ${AnsiColor.RED} | |_) | | |__| | | |__| |    | |
+${AnsiColor.GREEN}|_____/  |_|      |_|  \_\ |_____| |_| \_|  \_____| ${AnsiColor.RED} |____/   \____/   \____/     |_|
+
+${AnsiColor.BRIGHT_CYAN}:: Github: ${AnsiColor.BLACK}kamilens :: Running Spring Boot ${spring-boot.version} ::

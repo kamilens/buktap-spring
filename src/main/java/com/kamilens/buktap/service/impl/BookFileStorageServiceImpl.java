@@ -67,15 +67,16 @@ public class BookFileStorageServiceImpl implements BookFileStorageService {
                                         Set<Long> previewPages) throws IOException {
         PDDocument document = PDDocument.load(bookFile.getBytes());
         Splitter splitter = new Splitter();
-        List<PDDocument> Pages = splitter.split(document);
+        List<PDDocument> pages = splitter.split(document);
 
-        Iterator<PDDocument> iterator = Pages.listIterator();
+        Iterator<PDDocument> iterator = pages.listIterator();
 
         Set<BookPage> bookPages = new HashSet<>();
 
         long i = 0;
         BookPage bookPage;
-        String mainPathLocal = mainPath, fullPath;
+        String mainPathLocal = mainPath;
+        String fullPath;
 
         String bookPagePath = String.format("%s/%s/%s", mainPathLocal, bookUniquePath, pdfPagesSuffix);
         Files.createDirectories(Path.of(bookPagePath));

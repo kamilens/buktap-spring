@@ -1,6 +1,8 @@
 package com.kamilens.buktap.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.kamilens.buktap.entity.enumeration.UserRole;
+import com.kamilens.buktap.entity.enumeration.UserStatus;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -38,10 +40,17 @@ public class User {
     @NotNull
     @NotBlank
     @NotEmpty
-    @Min(7)
+    @Size(min = 7)
     @Column(name = "password")
     private String password;
 
+    @Enumerated(value = EnumType.STRING)
+    @Column(name = "user_role")
+    private UserRole role;
+
+    @Enumerated(value = EnumType.STRING)
+    @Column(name = "user_status")
+    private UserStatus status;
 
     @NotNull
     @Temporal(TemporalType.DATE)

@@ -1,0 +1,34 @@
+{
+  "properties": [
+    {
+      "name": "buktap.file-storage-path.books.main-path",
+      "type": "java.lang.String",
+      "description": "Description for buktap.file-storage-path.books.main-path."
+    },
+    {
+      "name": "buktap.file-storage-path.books.pdf-pages-suffix",
+      "type": "java.lang.String",
+      "description": "Description for buktap.file-storage-path.books.pdf-pages-suffix."
+    },
+    {
+      "name": "buktap.file-storage-path.books.book-images-suffix",
+      "type": "java.lang.String",
+      "description": "Description for buktap.file-storage-path.books.book-images-suffix."
+    },
+    {
+      "name": "jwt.header",
+      "type": "java.lang.String",
+      "description": "Description for jwt.header."
+    },
+    {
+      "name": "jwt.secret",
+      "type": "java.lang.String",
+      "description": "Description for jwt.secret."
+    },
+    {
+      "name": "jwt.expiration",
+      "type": "java.lang.String",
+      "description": "Description for jwt.expiration."
+    }
+  ]
+}

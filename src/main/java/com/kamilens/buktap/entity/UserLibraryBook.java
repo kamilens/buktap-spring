@@ -4,9 +4,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @EqualsAndHashCode(of = "id")
 @Data
@@ -29,8 +28,7 @@ public class UserLibraryBook {
     private String comment;
 
     @NotNull
-    @Min(1)
-    @Max(5)
+    @Size(min = 1, max = 5)
     @Column(name = "rating")
     private Short rating;
 
