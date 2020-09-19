@@ -4,20 +4,17 @@ import com.kamilens.buktap.entity.Book;
 import com.kamilens.buktap.entity.BookImage;
 import com.kamilens.buktap.entity.BookPage;
 import com.kamilens.buktap.repository.BookRepository;
+import com.kamilens.buktap.service.BookFileStorageService;
 import com.kamilens.buktap.service.BookService;
 import com.kamilens.buktap.service.dto.BookCreateDTO;
 import com.kamilens.buktap.service.mapper.BookMapper;
 import com.kamilens.buktap.web.rest.vm.IdResponseVM;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import org.apache.pdfbox.multipdf.Splitter;
-import org.apache.pdfbox.pdmodel.PDDocument;
 import org.springframework.stereotype.Service;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.*;
+import java.util.Set;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
@@ -25,55 +22,18 @@ public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
     private final BookMapper bookMapper;
+    private final BookFileStorageService bookFileStorageService;
 
     @SneakyThrows
     @Override
     public IdResponseVM create(BookCreateDTO bookCreateDTO) {
-        PDDocument document = PDDocument.load(bookCreateDTO.getFile().getBytes());
-        Splitter splitter = new Splitter();
-        List<PDDocument> Pages = splitter.split(document);
+        String bookUniquePath = UUID.randomUUID().toString();
 
-        Iterator<PDDocument> iterator = Pages.listIterator();
+        BookImage bookImage = bookFileStorageService
+                .storeBookImage(bookUniquePath, bookCreateDTO.getImage());
 
-        Set<BookPage> bookPages = new HashSet<>();
-
-        long i = 1;
-        BookPage bookPage;
-        String
-                absPath = "C:/Users/kamil/Desktop/temp_storage",
-                folderPath = UUID.randomUUID().toString(),
-                fileName,
-                fullPath;
-
-        Files.createDirectory(Path.of(String.format("%s/%s/%s", absPath, "pdf_pages", folderPath)));
-        Files.createDirectory(Path.of(String.format("%s/%s/%s", absPath, "book_images", folderPath)));
-
-        while(iterator.hasNext()) {
-            PDDocument pd = iterator.next();
-            fileName = UUID.randomUUID().toString();
-            fullPath = String.format("%s/%s/%s/%s-%d.pdf", absPath, "pdf_pages", folderPath, fileName, i++);
-            pd.save(fullPath);
-            bookPage = BookPage
-                    .builder()
-                    .file(fullPath)
-                    .page(i)
-                    .preview(bookCreateDTO.getPreviewPages().contains(i))
-                    .build();
-
-            bookPages.add(bookPage);
-        }
-
-        document.close();
-
-        String imageFilePath = String.format("%s/%s/%s/%s.png", absPath, "book_images", folderPath, UUID.randomUUID().toString());
-
-        BookImage bookImage = BookImage
-                .builder()
-                .original(imageFilePath)
-                .thumbnail(imageFilePath)
-                .build();
-
-        Files.writeString(Paths.get(imageFilePath), Arrays.toString(bookCreateDTO.getImage().getBytes()));
+        Set<BookPage> bookPages = bookFileStorageService
+                .storeBookPages(bookUniquePath, bookCreateDTO.getFile(), bookCreateDTO.getPreviewPages());
 
         Book mappedBook = bookMapper.createDtoToEntity(bookCreateDTO, bookImage, bookPages);
 

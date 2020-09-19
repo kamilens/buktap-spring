@@ -10,7 +10,8 @@ import javax.validation.constraints.NotNull;
 
 @Builder
 @NoArgsConstructor
-@AllArgsConstructor@EqualsAndHashCode(of = {"id", "page"})
+@AllArgsConstructor
+@EqualsAndHashCode(of = {"id", "page"})
 @Data
 @Entity
 @Table(name = "book_pages")

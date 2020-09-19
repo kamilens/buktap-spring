@@ -18,3 +18,10 @@ spring:
     username: buktap
     password: GnkuKw5d
     driverClassName: com.mysql.cj.jdbc.Driver
+
+buktap:
+  file-storage-path:
+    books:
+      main-path: "C:/temp_storage/books"
+      pdf-pages-suffix: "/pdf_pages"
+      book-images-suffix: "/book_images"
