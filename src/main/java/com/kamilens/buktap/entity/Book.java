@@ -3,11 +3,14 @@ package com.kamilens.buktap.entity;
 import com.kamilens.buktap.entity.enumeration.Language;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.validator.constraints.ISBN;
-import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -69,7 +72,8 @@ public class Book {
     @Column(name = "language")
     private Language language;
 
-    @CreatedDate
+    @NotNull
+    @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "upload_date")
     private Date uploadDate;

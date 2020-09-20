@@ -15,14 +15,15 @@ import com.kamilens.buktap.web.rest.vm.IdVM;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.Set;
 import java.util.UUID;
 
 @RequiredArgsConstructor
+@Transactional
 @Service
 public class BookServiceImpl implements BookService {
 
@@ -53,11 +54,13 @@ public class BookServiceImpl implements BookService {
         return IdVM.builder().id(savedBook.getId()).build();
     }
 
+    @Transactional(readOnly = true)
     @Override
-    public Page<BookVM> getAll(Specification<Book> bookSpecification, Pageable pageable) {
-        return bookRepository.findAll(bookSpecification, pageable).map(bookMapper::entityToVM);
+    public Page<BookVM> getAll(Pageable pageable) {
+        return bookRepository.findAll(pageable).map(bookMapper::entityToVM);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public BookVM getById(Long id) {
         Book book = bookRepository.findById(id).orElseThrow(BookNotFoundException::new);

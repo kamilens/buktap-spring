@@ -12,13 +12,13 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfig implements WebMvcConfigurer {
 
     @Value("${jwt.header}")
-    private static String authorizationHeader;
+    private String authorizationHeader;
 
     @Value("${pageable.headers.total-count}")
-    private static String totalCount;
+    private String totalCount;
 
     @Value("${pageable.headers.page-number}")
-    private static String pageNumber;
+    private String pageNumber;
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {

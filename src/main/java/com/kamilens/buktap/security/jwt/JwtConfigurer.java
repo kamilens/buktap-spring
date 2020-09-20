@@ -1,4 +1,4 @@
-package com.kamilens.buktap.security;
+package com.kamilens.buktap.security.jwt;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.config.annotation.SecurityConfigurerAdapter;

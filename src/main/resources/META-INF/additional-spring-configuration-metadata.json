@@ -29,6 +29,26 @@
       "name": "jwt.expiration",
       "type": "java.lang.String",
       "description": "Description for jwt.expiration."
+    },
+    {
+      "name": "pageable.headers.total-count",
+      "type": "java.lang.String",
+      "description": "Description for pageable.headers.total-count."
+    },
+    {
+      "name": "pageable.headers.page-number",
+      "type": "java.lang.String",
+      "description": "Description for pageable.headers.page-number."
+    },
+    {
+      "name": "buktap.emails.no-reply",
+      "type": "java.lang.String",
+      "description": "Description for buktap.emails.no-reply."
+    },
+    {
+      "name": "jwt.prefix",
+      "type": "java.lang.String",
+      "description": "Description for jwt.prefix."
     }
   ]
 }

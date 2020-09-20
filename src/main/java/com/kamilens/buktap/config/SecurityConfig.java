@@ -1,6 +1,6 @@
 package com.kamilens.buktap.config;
 
-import com.kamilens.buktap.security.JwtConfigurer;
+import com.kamilens.buktap.security.jwt.JwtConfigurer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,14 +29,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/").permitAll()
-                .antMatchers("/api/auth/authenticate").permitAll()
+                .antMatchers(
+                        "/api/auth/authenticate",
+                        "/api/auth/register",
+                        "/api/auth/verify/**"
+                ).permitAll()
                 // swagger >>>
-                .antMatchers("/v2/api-docs",
+                .antMatchers(
+                        "/v2/api-docs",
                         "/configuration/ui",
                         "/swagger-resources/**",
                         "/configuration/security",
                         "/swagger-ui.html",
-                        "/webjars/**")
+                        "/webjars/**"
+                )
                 .permitAll()
                 .anyRequest()
                 .authenticated()

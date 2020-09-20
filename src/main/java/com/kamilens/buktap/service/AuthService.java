@@ -1,6 +1,8 @@
 package com.kamilens.buktap.service;
 
+import com.kamilens.buktap.entity.User;
 import com.kamilens.buktap.service.dto.AuthenticationDTO;
+import com.kamilens.buktap.service.dto.RefreshTokenDTO;
 import com.kamilens.buktap.service.dto.UserRegisterDTO;
 import com.kamilens.buktap.web.rest.vm.IdVM;
 import com.kamilens.buktap.web.rest.vm.JWTTokenVM;
@@ -12,8 +14,18 @@ public interface AuthService {
 
     IdVM register(UserRegisterDTO userRegisterDTO);
 
+    String generateVerificationToken(User user);
+
+    User getCurrentUser();
+
+    IdVM verify(String token);
+
     JWTTokenVM authenticate(AuthenticationDTO authenticationDTO);
 
-    void logout(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse);
+    JWTTokenVM refresh(RefreshTokenDTO refreshTokenDTO);
+
+    IdVM logout(RefreshTokenDTO refreshTokenDTO,
+                HttpServletRequest httpServletRequest,
+                HttpServletResponse httpServletResponse);
 
 }

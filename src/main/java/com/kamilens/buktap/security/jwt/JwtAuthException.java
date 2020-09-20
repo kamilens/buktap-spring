@@ -1,14 +1,13 @@
-package com.kamilens.buktap.security;
+package com.kamilens.buktap.security.jwt;
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 
 @ResponseStatus(HttpStatus.UNAUTHORIZED)
 @Getter
-public class JwtAuthException extends AuthenticationException {
+public class JwtAuthException extends RuntimeException {
 
     private HttpStatus httpStatus;
 

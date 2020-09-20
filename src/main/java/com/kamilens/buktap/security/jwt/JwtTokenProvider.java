@@ -1,6 +1,8 @@
-package com.kamilens.buktap.security;
+package com.kamilens.buktap.security.jwt;
 
+import com.kamilens.buktap.entity.enumeration.UserRole;
 import io.jsonwebtoken.*;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,9 +12,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
+import java.time.Instant;
 import java.util.Base64;
 import java.util.Date;
 
@@ -23,9 +27,13 @@ public class JwtTokenProvider {
     @Value("${jwt.header}")
     private String authorizationHeader;
 
+    @Value("${jwt.prefix}")
+    private String prefix;
+
     @Value("${jwt.secret}")
     private String secretKey;
 
+    @Getter
     @Value("${jwt.expiration}")
     private Long validityInMilliseconds;
 
@@ -37,27 +45,29 @@ public class JwtTokenProvider {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
 
-    public String createToken(String username, String role) {
-        Claims claims = Jwts.claims().setSubject(username);
-        claims.put("role", role);
+    public String createToken(String email, UserRole userRole) {
+        Claims claims = Jwts.claims().setSubject(email);
+        claims.put("role", userRole.name());
         Date now = new Date();
-        Date validity = new Date(now.getTime() + validityInMilliseconds * 1000);
 
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(now)
-                .setExpiration(validity)
+                .setExpiration(Date.from(Instant.now().plusMillis(validityInMilliseconds)))
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
     }
 
     public boolean validateToken(String token) {
-        try {
-            Jws<Claims> claimsJws = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
-            return !claimsJws.getBody().getExpiration().before(new Date());
-        } catch (JwtException | IllegalArgumentException e) {
-            throw new JwtAuthException("JWT token is expired or invalid", HttpStatus.UNAUTHORIZED);
+        if (StringUtils.hasText(token)) {
+            try {
+                Jws<Claims> claimsJws = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
+                return !claimsJws.getBody().getExpiration().before(new Date());
+            } catch (JwtException | IllegalArgumentException e) {
+                throw new JwtAuthException("JWT token is expired or invalid", HttpStatus.UNAUTHORIZED);
+            }
         }
+        return false;
     }
 
     public Authentication getAuthentication(String token) {
@@ -70,7 +80,11 @@ public class JwtTokenProvider {
     }
 
     public String resolveToken(HttpServletRequest httpServletRequest) {
-        return httpServletRequest.getHeader(authorizationHeader);
+        String bearerToken = httpServletRequest.getHeader(authorizationHeader);
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(prefix)) {
+            return bearerToken.substring(7);
+        }
+        return bearerToken;
     }
 
 }

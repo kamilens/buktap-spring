@@ -12,22 +12,32 @@ spring:
     database-platform: org.hibernate.dialect.MySQL5Dialect
     generate-ddl: true
     hibernate:
-      ddl-auto: create-drop
+#      ddl-auto: create-drop
+      ddl-auto: none
   datasource:
     url: "jdbc:mysql://localhost:3306/buktapdb?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true"
     username: "buktap"
     password: "GnkuKw5d"
     driverClassName: com.mysql.cj.jdbc.Driver
+  mail:
+    host: "smtp.mailtrap.io"
+    port: 25
+    username: ""
+    password: ""
+    protocol: "smtp"
 buktap:
   file-storage-path:
     books:
       main-path: "C:/temp_storage/books"
       pdf-pages-suffix: "/pdf_pages"
       book-images-suffix: "/book_images"
+  emails:
+    no-reply: "noreply@buktap.com"
 jwt:
   header: "Authorization"
-  secret: "91426db86db327ef48a85181127899b2dda99a14bd09e1a691c00a325f74357b"
-  expiration: 604800
+  prefix: "Bearer "
+  secret: ""
+  expiration: 864000000
 pageable:
   headers:
     total-count: "X-Total-Count"

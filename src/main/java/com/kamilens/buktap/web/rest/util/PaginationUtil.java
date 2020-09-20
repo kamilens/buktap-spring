@@ -12,12 +12,12 @@ import org.springframework.stereotype.Component;
 public final class PaginationUtil {
 
     @Value("${pageable.headers.total-count}")
-    private static String totalCount;
+    private String totalCount;
 
     @Value("${pageable.headers.page-number}")
-    private static String pageNumber;
+    private String pageNumber;
 
-    public static <T> HttpHeaders generatePaginationHeaders(Page<T> page) {
+    public <T> HttpHeaders generatePaginationHeaders(Page<T> page) {
         HttpHeaders headers = new HttpHeaders();
         headers.add(totalCount, Long.toString(page.getTotalElements()));
         headers.add(pageNumber, Long.toString(page.getNumber()));
