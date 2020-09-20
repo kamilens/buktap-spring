@@ -7,8 +7,8 @@ import java.util.stream.Collectors;
 
 public enum UserRole {
 
-    USER(Set.of(UserPermission.DEVELOPERS_READ)),
-    ADMIN(Set.of(UserPermission.DEVELOPERS_READ, UserPermission.DEVELOPERS_WRITE));
+    USER(Set.of(UserPermission.BOOK_READ)),
+    ADMIN(Set.of(UserPermission.BOOK_READ, UserPermission.BOOK_WRITE));
 
     private final Set<UserPermission> permissions;
 

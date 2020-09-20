@@ -1,33 +1,51 @@
 package com.kamilens.buktap.web.rest;
 
-import com.kamilens.buktap.service.BookService;
+import com.kamilens.buktap.entity.Book;
+import com.kamilens.buktap.entity.enumeration.UserPermission;
 import com.kamilens.buktap.service.dto.BookCreateDTO;
+import com.kamilens.buktap.service.dto.BookUpdateDTO;
+import com.kamilens.buktap.web.rest.vm.BookVM;
 import com.kamilens.buktap.web.rest.vm.IdVM;
-import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
-import org.springframework.http.HttpStatus;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.io.IOException;
+import java.util.List;
 
-@RequiredArgsConstructor
+@Api(tags = "Book resource")
 @RequestMapping("/api/books")
-@RestController
-public class BookController {
+public interface BookController {
 
-    private final BookService bookService;
-
-    @SneakyThrows
-    @PreAuthorize("hasAuthority('developers:read')")
+    @ApiOperation("Create Book")
+    @PreAuthorize("hasPermission(\"" + UserPermission.Names.BOOK_WRITE + "\")")
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<IdVM> create(@ModelAttribute @Valid BookCreateDTO bookCreateDTO) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(bookService.create(bookCreateDTO));
-    }
+    ResponseEntity<IdVM> create(@ModelAttribute @Valid BookCreateDTO bookCreateDTO) throws IOException;
+
+    @ApiOperation("Get all Books")
+    @PreAuthorize("hasPermission(\"" + UserPermission.Names.BOOK_READ + "\")")
+    @GetMapping
+    ResponseEntity<List<BookVM>> getAll(Specification<Book> bookSpecification, Pageable pageable);
+
+    @ApiOperation("Get Book by ID")
+    @GetMapping("/{id}")
+    @PreAuthorize("hasPermission(\"" + UserPermission.Names.BOOK_READ + "\")")
+    ResponseEntity<BookVM> getById(@PathVariable Long id);
+
+    @ApiOperation("Update Book")
+    @PutMapping
+    @PreAuthorize("hasPermission(\"" + UserPermission.Names.BOOK_WRITE + "\")")
+    ResponseEntity<IdVM> update(@RequestBody @Valid BookUpdateDTO bookUpdateDTO) throws IOException;
+
+    @ApiOperation("Delete Book by ID")
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasPermission(\"" + UserPermission.Names.BOOK_WRITE + "\")")
+    ResponseEntity<IdVM> delete(@PathVariable Long id);
 
 }

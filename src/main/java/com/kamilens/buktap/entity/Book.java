@@ -7,9 +7,7 @@ import org.hibernate.validator.constraints.ISBN;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -44,6 +42,8 @@ public class Book {
     )
     private Set<BookAuthor> authors = new HashSet<>();
 
+    @Size(min = 1)
+    @NotNull
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "book_x_book_genre",
@@ -74,6 +74,11 @@ public class Book {
     @Column(name = "upload_date")
     private Date uploadDate;
 
+    @NotNull
+    @Column(name = "storage_folder")
+    private String storageFolder;
+
+    @Size(min = 5)
     @NotNull
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<BookPage> pages = new HashSet<>();

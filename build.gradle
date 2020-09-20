@@ -29,7 +29,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 //	implementation 'org.liquibase:liquibase-core'
 	compileOnly 'org.projectlombok:lombok'
-//	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'mysql:mysql-connector-java'
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 	annotationProcessor 'org.projectlombok:lombok'
@@ -43,6 +43,11 @@ dependencies {
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.3.1.Final'
 	compile group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.21'
 	compile group: 'commons-io', name: 'commons-io', version: '2.6'
+	compile group: 'io.springfox', name: 'springfox-boot-starter', version: '3.0.0'
+	compile 'io.springfox:springfox-swagger-ui:2.9.2'
+	compile group: 'io.springfox', name: 'springfox-data-rest', version: '3.0.0'
+	compile group: 'io.springfox', name: 'springfox-bean-validators', version: '3.0.0'
+	compile group: 'com.google.guava', name: 'guava', version: '29.0-jre'
 }
 
 test {

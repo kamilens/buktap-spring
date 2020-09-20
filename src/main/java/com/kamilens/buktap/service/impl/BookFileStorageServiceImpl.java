@@ -8,6 +8,7 @@ import org.apache.pdfbox.multipdf.Splitter;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
@@ -44,7 +45,11 @@ public class BookFileStorageServiceImpl implements BookFileStorageService {
                 bookImagesSuffix
         );
 
-        Files.createDirectories(Path.of(imageFilePath));
+        if (Files.notExists(Path.of(imageFilePath))) {
+            Files.createDirectories(Path.of(imageFilePath));
+        } else {
+            FileSystemUtils.deleteRecursively(Path.of(imageFilePath));
+        }
 
         String fullPath =  String.format(
                 "%s/%s.%s",

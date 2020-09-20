@@ -10,7 +10,12 @@ import java.util.Date;
 import java.util.Set;
 
 @Data
-public class BookCreateDTO {
+public class BookUpdateDTO {
+
+    @NotNull
+    @NotBlank
+    @NotEmpty
+    private Long id;
 
     @NotNull
     @NotBlank
@@ -39,9 +44,6 @@ public class BookCreateDTO {
 
     @NotNull
     private Language language;
-
-    @NotNull
-    private MultipartFile file;
 
     @NotNull
     @Size(min = 3, max = 5)
