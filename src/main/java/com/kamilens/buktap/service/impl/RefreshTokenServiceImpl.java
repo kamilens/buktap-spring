@@ -5,10 +5,13 @@ import com.kamilens.buktap.repository.RefreshTokenRepository;
 import com.kamilens.buktap.service.RefreshTokenService;
 import com.kamilens.buktap.web.rest.error.AuthException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.UUID;
 
@@ -16,6 +19,9 @@ import java.util.UUID;
 @Transactional
 @Service
 public class RefreshTokenServiceImpl implements RefreshTokenService {
+
+    @Value("${jwt.refresh-expiration}")
+    private Long refreshExpiration;
 
     private final RefreshTokenRepository refreshTokenRepository;
 
@@ -27,9 +33,10 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
 
     @Override
     public RefreshToken generateRefreshToken() {
-        RefreshToken refreshToken = new RefreshToken();
-        refreshToken.setToken(UUID.randomUUID().toString());
-        refreshToken.setCreationDate(Date.from(Instant.now()));
+        RefreshToken refreshToken = RefreshToken.builder()
+                .token(UUID.randomUUID().toString())
+                .creationDate(Date.from(Instant.now()))
+                .build();
 
         return refreshTokenRepository.save(refreshToken);
     }
@@ -42,6 +49,12 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     @Override
     public void deleteRefreshToken(String token) {
         refreshTokenRepository.deleteByToken(token);
+    }
+
+    @Scheduled(cron = "0 0 * * * *")
+    public void removeNotActivatedUsers() {
+        refreshTokenRepository
+                .deleteAllByCreationDateAfter(Date.from(Instant.now().plus(refreshExpiration, ChronoUnit.MINUTES)));
     }
 
 }

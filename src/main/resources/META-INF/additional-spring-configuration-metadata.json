@@ -49,6 +49,11 @@
       "name": "jwt.prefix",
       "type": "java.lang.String",
       "description": "Description for jwt.prefix."
+    },
+    {
+      "name": "jwt.refresh-expiration",
+      "type": "java.lang.String",
+      "description": "Description for jwt.refresh-expiration."
     }
   ]
 }

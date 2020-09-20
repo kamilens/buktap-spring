@@ -19,7 +19,9 @@ import com.kamilens.buktap.web.rest.error.NotFoundException;
 import com.kamilens.buktap.web.rest.vm.IdVM;
 import com.kamilens.buktap.web.rest.vm.JWTTokenVM;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
@@ -33,6 +35,8 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -48,6 +52,9 @@ public class AuthServiceImpl implements AuthService {
     private final VerificationTokenRepository verificationTokenRepository;
     private final MailService mailService;
     private final RefreshTokenService refreshTokenService;
+
+    @Value("${buktap.emails.verification-expiration}")
+    private Long verificationExpires;
 
     private static final class UserNotFoundException extends NotFoundException {
         public UserNotFoundException() {
@@ -163,6 +170,20 @@ public class AuthServiceImpl implements AuthService {
         securityContextLogoutHandler.logout(httpServletRequest, httpServletResponse, null);
 
         return IdVM.builder().id(user.getId()).build();
+    }
+
+    @Scheduled(cron = "0 0 * * * *")
+    public void removeNotActivatedUsersAndVerificationTokens() {
+        verificationTokenRepository
+                .findAllByCreationDateBefore(Date.from(Instant.now().plus(verificationExpires, ChronoUnit.MINUTES)))
+                .stream()
+                .filter(verificationToken ->
+                        UserStatus.WAITING_FOR_VERIFICATION.name().equals(verificationToken.getUser().getStatus().name())
+                )
+                .forEach(verificationToken -> userRepository.deleteById(verificationToken.getUser().getId()));
+
+        verificationTokenRepository
+                .deleteAllByCreationDateBefore(Date.from(Instant.now().plus(verificationExpires, ChronoUnit.MINUTES)));
     }
 
 }

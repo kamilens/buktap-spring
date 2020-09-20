@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: dev
+    active: prod
   servlet:
     multipart:
       max-file-size: 10MB
@@ -12,7 +12,7 @@ spring:
     database-platform: org.hibernate.dialect.MySQL5Dialect
     generate-ddl: true
     hibernate:
-#      ddl-auto: create-drop
+      #      ddl-auto: create-drop
       ddl-auto: none
   datasource:
     url: "jdbc:mysql://localhost:3306/buktapdb?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true"
@@ -37,7 +37,8 @@ jwt:
   header: "Authorization"
   prefix: "Bearer "
   secret: ""
-  expiration: 864000000
+  expiration: 1080000000 # 3_hours
+  refresh-expiration: 7884000000000 # 3_months
 pageable:
   headers:
     total-count: "X-Total-Count"

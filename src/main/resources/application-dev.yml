@@ -1,0 +1,46 @@
+spring:
+  profiles:
+    active: dev
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+  jpa:
+    database: mysql
+    show-sql: true
+    open-in-view: false
+    database-platform: org.hibernate.dialect.MySQL5Dialect
+    generate-ddl: true
+    hibernate:
+      ddl-auto: create-drop
+#      ddl-auto: update
+  datasource:
+    url: "jdbc:mysql://localhost:3306/buktapdb?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true"
+    username: "buktap"
+    password: "GnkuKw5d"
+    driverClassName: com.mysql.cj.jdbc.Driver
+  mail:
+    host: "smtp.mailtrap.io"
+    port: 25
+    username: ""
+    password: ""
+    protocol: "smtp"
+buktap:
+  file-storage-path:
+    books:
+      main-path: "C:/temp_storage/books"
+      pdf-pages-suffix: "/pdf_pages"
+      book-images-suffix: "/book_images"
+  emails:
+    verification-expiration: 3600 # 1_hour_in_seconds
+    no-reply: "noreply@buktap.com"
+jwt:
+  header: "Authorization"
+  prefix: "Bearer "
+  secret: ""
+  expiration: 86400 # 1_day_in_seconds
+  refresh-expiration: 7884000000000 # 3_months
+pageable:
+  headers:
+    total-count: "X-Total-Count"
+    page-number: "X-Page-Number"

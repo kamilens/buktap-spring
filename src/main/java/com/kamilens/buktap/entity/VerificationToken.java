@@ -1,9 +1,11 @@
 package com.kamilens.buktap.entity;
 
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
-import java.time.Instant;
+import javax.validation.constraints.NotNull;
+import java.util.Date;
 
 @Builder
 @NoArgsConstructor
@@ -26,7 +28,10 @@ public class VerificationToken {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(name = "expirationDate")
-    private Instant expirationDate;
+    @NotNull
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "creation_date")
+    private Date creationDate;
 
 }
